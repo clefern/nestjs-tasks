@@ -71,3 +71,37 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+# Notes
+
+## Validation
+
+### In order to validate we need to install some packages
+
+- class-validator
+- class-transformer
+
+To use the validation in the app global level we need to set in the main.ts file right before app.listen
+`app.useGlobalPipes(new ValidationPipe());`
+
+To throw an error in case of not found we should apply the login in the service and use:
+
+`if (!task) { throw new NotFoundException(`Task with ID ${id} not found`); } `
+
+## Postgres -
+
+Run postgres in the docker
+
+`docker run --name postgres-nest -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
+
+check if the docker is running our container
+`docker container ls`
+
+stop the container running
+`docker container stop postgres-nest`
+
+start the container
+`docker container start postgres-nest`
+
+delete a container
+`docker container rm postgres-nest`
