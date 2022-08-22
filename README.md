@@ -105,3 +105,98 @@ start the container
 
 delete a container
 `docker container rm postgres-nest`
+
+### typeorm
+
+Object relation map tool to use in relation databases
+
+integration with
+decorations, dependency injection
+great integration with the
+
+pg database driver to postgres
+Every time we use with a different database we will need the corresponding driver
+
+Database config was put in the app.module.ts
+` Type0rmModule.forRoot({ type:'postgres', host:'localhost', port:5432, username:'postgres', password:'postgres', database:'task-management', autoLoadEntities:true, }),`
+
+TypeOrm supports
+
+- Active Record
+- Data Mapper
+
+# JWT Passport Authentication
+
+`npm i @nestjs/jwt @nestjs/passport passport passport-jwt @types/passport-jwt`
+
+Auth Module
+` PassportModule.register({ defaultStrategy: 'jwt' }), JwtModule.register({ secret: 'topSecret51', signOptions: { expiresIn: 3600, }, }),`
+
+In the auth service to generate the jwt token
+`const payload: JwtPayload = { username }; const accessToken: string = await this.jwtService.sign(payload); return { accessToken };`
+
+### JWT Strategy
+
+`@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+constructor(private userService: UserService) {
+super({
+secretOrKey: 'topSecret51',
+jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+});
+}
+
+async validate({ username }: JwtPayload): Promise<User> {
+const user: User = await this.userService.getUserByUsername(username);
+return user;
+}
+}
+
+`
+
+After provide the JwtStrategy for AuthModule and exports it as well
+
+Protect only one route in a controller or the entire controller
+`@UseGuards(AuthGuard())`
+
+### TypeOrm Relations
+
+set a new property that will be owner of the object created in a OneToMany relation
+One To Many
+`@OneToMany((_type) => Task, (task) => task.user, { eager: true }) tasks: Task[];`
+
+Eager means whenever e fetch the owner object it will also fetch the many objects that belong to that owner
+
+Many To One
+`@ManyToOne((_type) => User, (user) => user.tasks, { eager: false })`
+
+We need both parent and child declaration to the relation works
+
+### Create our own decorators
+
+The below decorator gets the user of the request token when the user is logged in and has that token
+
+`export const GetUser = createParamDecorator( (data, ctx: ExecutionContext): User => { const req = ctx.switchToHttp().getRequest(); return req.user; }, );`
+
+To associate the owner id in the child object created is necessary to pass the parent object in the child creation. Automatically it's create a ownerId column in the child table
+
+## Class Transformer -
+
+#### How to avoid pass all owner information when associating the owner with the child
+
+One of the decorators exposed by class-transformer is
+`@Exclude({ toPlainOnly: true })`
+
+It will exclude the relation object in
+whenever you bridge that object into plain text it will be exclude
+Whenever you set a response in json it means plain text
+
+But it is not enough, we need to Use interceptable to achieve that.
+You can put a interceptable in any scale like:
+
+- handler level\
+- controller level
+- application level
+
+Create Interceptable an use it in the mais.ts file as follow
+`app.useGlobalInterceptors(new TransformInterceptor());`
