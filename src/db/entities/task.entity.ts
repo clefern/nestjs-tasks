@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from '../../tasks/models/task-status.enum';
 
-@Entity({ name: 'TaskTable' })
+@Entity()
 export class Task {
   @PrimaryGeneratedColumn('uuid')
   id: string;

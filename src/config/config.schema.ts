@@ -14,4 +14,5 @@ export const configValidationSchema = Joi.object({
   TYPEORM_MIGRATIONS_DIR: Joi.string().required(),
   TYPEORM_ENTITIES_DIR: Joi.string().required(),
   HTTP_PORT: Joi.number().default(3001),
+  JWT_SECRET: Joi.string().required(),
 });

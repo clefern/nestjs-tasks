@@ -259,4 +259,9 @@ We are usin the key in two places:
 
 - jwt.strategy and auth.module
 
-Then we can provide an extra value JWT_SECRET TO OUR environmenr
+Then we can provide an extra value JWT_SECRET TO OUR environment
+`JWT_SECRET: Joi.string().required(),` in the config.schema
+
+and put the `JWT_SECRET` in the env file
+
+Usually the value of it is using a online password generator tool
