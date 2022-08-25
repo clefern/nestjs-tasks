@@ -198,5 +198,65 @@ You can put a interceptable in any scale like:
 - controller level
 - application level
 
-Create Interceptable an use it in the mais.ts file as follow
+Create Interceptor an use it in the mais.ts file as follow
 `app.useGlobalInterceptors(new TransformInterceptor());`
+
+### Get the children that just belongs to the logged in user
+
+We can use the custom decorator that grabs the user logged in that we get from the request token and use it to associate the user and the children that are being created, listed, etc...
+
+The place we use custom decorators is in the Controller method metadata, as follow
+
+```
+@Get()
+getTasks( @Query() filterDto: GetTasksFilterDto, @GetUser() user: User): Promise<Task[]> {
+  return this.taskService.getTasks(filterDto, user);
+}
+```
+
+Then we only need to pass the user for the service and repository where we will compose our query to look for children only for that logged in user.
+
+In the repository we pass the entire user to a where closure method inside an object.
+That way the queryBuilder will know how to handle that user cince in its child entity declaration has a relation with the user
+`const query = this.createQueryBuilder('task').where({ user });`
+
+```
+
+```
+
+### Config Environments
+
+First of all we would need to create a config module that exposes a ConfigService which loads the appropriate .env file. For this NestJs provides a package:
+This follow the NestJs Approach
+
+`npm i --save @nestjs/config`
+
+This follow the TypeOrm Does:
+`yarn add dotenv @types/dotenv pg`
+``
+
+### TypeOrm Schematics
+
+`typeorm migration:create -n CrateUserTable`
+
+### Schema validation for environments
+
+We could check if any environment variable is missing and give the proper message
+validation for correct the mistake as soon as possible
+
+Install two packages:
+`yarn add @hapi/joi`
+`yarn add @types/hapi__joi ` -D for devDependency - and we need this package because @hapi/joi don't have type definition
+
+After we are going to create a config/schema.ts where we define our schema
+check the mentioned file.
+
+That implementation made me use the same environment config for both different scenarios like for migrations and for loading the env variables with validation.
+
+### Security - the JWT secret
+
+We are usin the key in two places:
+
+- jwt.strategy and auth.module
+
+Then we can provide an extra value JWT_SECRET TO OUR environmenr
