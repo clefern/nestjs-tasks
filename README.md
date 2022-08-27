@@ -325,3 +325,5 @@ Than we need to create a Procfile in the app root with the content:
 ```
   web: yarn start:prod
 ```
+
+I changed the procfile to use npm because yarn didn't run the command to build the app
