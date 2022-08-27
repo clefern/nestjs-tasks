@@ -327,3 +327,13 @@ Than we need to create a Procfile in the app root with the content:
 ```
 
 I changed the procfile to use npm because yarn didn't run the command to build the app
+
+After I create the Procfile it was not initiating the Dyno for web
+Than I changed the Procfile and the command became orange.
+When I tried to push the heroku wasn't recognizing changes,
+to solve that I run a command that solved the issue:
+`git push -f heroku HEAD:master`
+
+To check up the logs about the build in heroku run:
+`heroku logs --tail`
+You 'll have access to the logs in real time as the user make request to the app

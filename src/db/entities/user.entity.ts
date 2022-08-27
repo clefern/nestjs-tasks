@@ -13,12 +13,16 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   firstName: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   lastName: string;
 
-  @OneToMany((_type) => Task, (task) => task.user, { eager: true })
+  @OneToMany((_) => Task, (task) => task.user, { eager: true })
   tasks: Task[];
 }
