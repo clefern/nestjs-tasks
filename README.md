@@ -265,3 +265,63 @@ Then we can provide an extra value JWT_SECRET TO OUR environment
 and put the `JWT_SECRET` in the env file
 
 Usually the value of it is using a online password generator tool
+
+### Heroku
+
+Create an Addon for Postgres database
+`heroku addons:create heroku-postgresql:hobby-dev -a tasky-apis`
+The database will be on the resources tab in the heroku.
+
+To get the credentials we click in the Heroku-postgres resource
+
+##### Prepare Environment to Production
+
+We need to set ssl and extra.ssl in the TypeOrmModuleOptions in order to access a different env for our app
+
+```
+  const isProduction = process.env.NODE_ENV === 'prod';
+  const configuration: TypeOrmModuleOptions = {
+    ssl: isProduction,
+    extra: {
+      ssl: isProduction ? { rejectUnauthorized: false } : null,
+    },
+    ...
+  }
+```
+
+After that we need to use out PORT from env not hardcoded anymore. For that we include the PORT variable in our schema config
+
+```
+  export const configValidationSchema = Joi.object({
+  PORT: Joi.number().default(3000),
+    ...
+  });
+```
+
+And in the main.ts file we use that from env as well:
+
+```
+  async function bootstrap() {
+    const PORT = process.env.PORT;
+    ...
+  }
+  bootstrap();
+```
+
+##### Add a remote git for production env using heroku cli
+
+That command will create a remote in heroku to our project
+`heroku git:remote -a HEROKU-APP-NAME`
+
+We need to handle a problem with typescript without elaborate too much.
+`heroku config:set NPM_CONFIG_PRODUCTION=false`
+`heroku config:set NODE_ENV=production`
+
+There are two ways to set the env variables to production:
+Manually by heroku CLI or in its own interface
+
+Than we need to create a Procfile in the app root with the content:
+
+```
+  web: yarn start:prod
+```
