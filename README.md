@@ -339,4 +339,4 @@ To check up the logs about the build in heroku run:
 You 'll have access to the logs in real time as the user make request to the app
 
 Test deploy automatic
-Remove tick in "wait for CI to pass before deploy" checkbox to test deploy automatic
+Remove tick in "wait for CI to pass before deploy" checkbox to test deploy automatic, and it works, amazing make deploys automatic using github connection
