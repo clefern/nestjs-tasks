@@ -337,3 +337,5 @@ to solve that I run a command that solved the issue:
 To check up the logs about the build in heroku run:
 `heroku logs --tail`
 You 'll have access to the logs in real time as the user make request to the app
+
+Test deploy automatic
